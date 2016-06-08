@@ -1,8 +1,11 @@
-= link_to "..", "/f/#{@current_dir}".gsub(%r(\/[^\/]+$), '')
-br
--@file_list.sort{|x,y| x[:sort_key] <=> y[:sort_key] }.each do |file_hash|
-  -if file_hash[:is_dir]
-    =link_to "#{file_hash[:filename].gsub("#{@current_dir}/", '')}", "/f#{file_hash[:filename]}"
-  -else
-    = file_hash[:filename].gsub("#{@current_dir}/", '')
+-if @is_file
+  =@file.html_safe
+-else
+  = link_to "..", file_lists_path(filepath: "#{@current_dir}".gsub(%r(\/[^\/]+$), ''))
   br
+  -@file_list.sort{|x,y| x[:sort_key] <=> y[:sort_key] }.each do |file_hash|
+    -if file_hash[:is_dir]
+      =link_to "#{file_hash[:filename].sub("#{@current_dir}", '')}", file_lists_path(filepath: file_hash[:filename])
+    -else
+      =link_to "#{file_hash[:filename].gsub("#{@current_dir}/", '')}", file_lists_path(filename: file_hash[:filename])
+    br

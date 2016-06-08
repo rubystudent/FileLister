@@ -1,9 +1,7 @@
 module FileLister
   class GetFiles
-
     def self.dir(path_param)
        path = path_param.gsub(%r{^\/?f\/?}, '')
-       path = '/' + path unless path.empty?
       full_path = "#{path}/*"
 
       res = Dir[full_path].map do |full_filename|
@@ -15,6 +13,18 @@ module FileLister
         }
       end
       res.reject { |x| x[:filename].empty? }
+    end
+
+    def self.open_file(path)
+      CodeRay.encode(
+        File.read(path),
+          :ruby,
+          :html,
+          :line_numbers => :inline,
+          :hint => :info,
+          :css => :style,
+          :wrap => :div
+        )
     end
   end
 end
